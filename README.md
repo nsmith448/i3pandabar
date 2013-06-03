@@ -8,4 +8,4 @@ TODO
 TODO
 
 ## License
-GNU GPLv3 - See LISENCE for complete text
+GNU GPLv3 - See LICENSE for complete text

@@ -73,16 +73,19 @@ class PandaService(Thread):
     def run(self):
         try:
             while self.running:
-                pinged = False
+                refresh = False
                 if self.pings:
                     nextPing = self.pings[0]
                     if nextPing.tick():
                         # God, this is horrible. Sorry.
                         while self.pings and self.pings[0].getTicks() <= 0:
                             self.pings.pop(0).done()
-                            pinged = True
-
-                if any(mod.tick() for mod in self.tickers) or pinged:
+                            refresh = True
+                
+                for mod in self.tickers:
+                    if mod.tick():
+                        refresh = True
+                if refresh:
                     self.redraw()
                 time.sleep(1)
         except Exception as e:
