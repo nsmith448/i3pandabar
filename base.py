@@ -9,9 +9,12 @@ class Port:
         self.segments = []
         self.w = 0
 
-    def add(self, text, color=None, separator=False, sepWidth=-1):
+    def add(self, text, color=None, separator=False, sepWidth=-1, seamless=False):
         if color is None:
             color = self.color
+        if seamless:
+            sepWidth = 0
+            separator = False
         self.addSegment(PortSegment(text, color, separator, sepWidth))
     
     def addSegment(self, seg):

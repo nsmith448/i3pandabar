@@ -5,6 +5,7 @@ from modules_core import ClockModule
 from module_mpd import MpdModule
 from module_pidgin import PidginModule
 from module_thunderbird import ThunderbirdModule
+from module_alsa import VolumeModule
 
 datetimePort = Port({
     'color': '#CCCCCC'
@@ -17,6 +18,9 @@ messagePort = Port({
 
 mpdPort = Port({
     'width': 48
+})
+
+volumePort = Port({
 })
 
 clock = ClockModule({
@@ -38,7 +42,11 @@ mpd = MpdModule({
 })
 mpd.addPort(mpdPort, 'player')
 
-ports = [messagePort, mpdPort, datetimePort]
-modules = [mpd, clock, pidgin, thunderbird]
+alsaVol = VolumeModule({
+})
+alsaVol.addPort(volumePort, 'volume_scale')
+
+ports = [messagePort, mpdPort, volumePort, datetimePort]
+modules = [mpd, clock, pidgin, thunderbird, alsaVol]
 
 PandaMain(ports, modules).run()
