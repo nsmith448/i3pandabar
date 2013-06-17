@@ -81,7 +81,7 @@ class VolumeModule(DBusModule):
         if self.channels['volume_bar']:
             port = self.ports['volume_bar']
 
-            shaded = int((self.volume / 100.0) * self.bar_width - 2)
+            shaded = int((self.volume / 100.0) * (self.bar_width - 2))
 
             c_filled = self.color_filled
             c_empty = self.color_empty
@@ -91,8 +91,11 @@ class VolumeModule(DBusModule):
 
             port.clear()
             port.add('[', color=c_empty, seamless=True)
-            port.add(VolumeModule.bar * shaded, color=c_filled, seamless=True)
-            port.add(VolumeModule.bar * (self.bar_width - 2 - shaded), color=c_empty, seamless=True)
+            if shaded < self.bar_width - 2:
+                port.add(VolumeModule.bar * shaded, color=c_filled, seamless=True)
+                port.add(VolumeModule.bar * (self.bar_width - 2 - shaded), color=c_empty, seamless=True)
+            else:
+                port.add(VolumeModule.bar * shaded, color=c_filled, seamless=True)
             port.add(']', color=c_empty)
 
         if self.channels['volume_icon']:
@@ -115,4 +118,4 @@ class VolumeModule(DBusModule):
                 c_filled = self.color_filled_m
 
             port.clear()
-            port.add( "%2d%%" % (self.volume), color=c_filled)
+            port.add( "%3d%%" % (self.volume), color=c_filled)
