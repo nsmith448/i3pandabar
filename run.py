@@ -23,6 +23,9 @@ mpdPort = Port({
 volumePort = Port({
 })
 
+volumePctPort = Port({
+})
+
 clock = ClockModule({
     'datetimefmt': '%A %B %d, %Y %I:%M %p'
 })
@@ -44,9 +47,10 @@ mpd.addPort(mpdPort, 'player')
 
 alsaVol = VolumeModule({
 })
-alsaVol.addPort(volumePort, 'volume_scale')
+alsaVol.addPort(volumePort, 'volume_bar')
+alsaVol.addPort(volumePctPort, 'volume_pct')
 
-ports = [messagePort, mpdPort, volumePort, datetimePort]
+ports = [messagePort, mpdPort, volumePort, volumePctPort, datetimePort]
 modules = [mpd, clock, pidgin, thunderbird, alsaVol]
 
 PandaMain(ports, modules).run()

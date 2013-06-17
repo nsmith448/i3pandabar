@@ -4,6 +4,7 @@ from base import DBusModule
 class VolumeModule(DBusModule):
     
     scale = u'▁▂▃▄▅▆▇█'
+    bar = '■'
     
     def __init__(self, cfg={}):
         DBusModule.__init__(self, 'alsa_volume')
@@ -50,13 +51,22 @@ class VolumeModule(DBusModule):
             if self.channels['volume_scale']:
                 self.ports['volume_scale'].clear()
                 redraw = True
+            if self.channels['volume_bar']:
+                self.ports['volume_bar'].clear()
+                redraw = True
+            if self.channels['volume_icon']:
+                self.ports['volume_icon'].clear()
+                redraw = True
+            if self.channels['volume_pct']:
+                self.ports['volume_icon'].clear()
+                redraw = True
         return redraw
 
     def onDraw(self):
         if self.channels['volume_scale']:
             port = self.ports['volume_scale']
 
-            shaded = int((self.volume / 100.0) * self.bar_width)
+            shaded = int((self.volume / 100.0) * len(VolumeModule.scale))
 
             c_filled = self.color_filled
             c_empty = self.color_empty
@@ -67,3 +77,42 @@ class VolumeModule(DBusModule):
             port.clear()
             port.add(VolumeModule.scale[:shaded], color=c_filled, seamless=True)
             port.add(VolumeModule.scale[shaded:], color=c_empty)
+
+        if self.channels['volume_bar']:
+            port = self.ports['volume_bar']
+
+            shaded = int((self.volume / 100.0) * self.bar_width - 2)
+
+            c_filled = self.color_filled
+            c_empty = self.color_empty
+            if self.muted:
+                c_filled = self.color_filled_m
+                c_empty = self.color_empty_m
+
+            port.clear()
+            port.add('[', color=c_empty, seamless=True)
+            port.add(VolumeModule.bar * shaded, color=c_filled, seamless=True)
+            port.add(VolumeModule.bar * (self.bar_width - 2 - shaded), color=c_empty, seamless=True)
+            port.add(']', color=c_empty)
+
+        if self.channels['volume_icon']:
+            port = self.ports['volume_icon']
+
+            i = int((self.volume / 100.0) * len(VolumeModule.scale))
+
+            c_filled = self.color_filled
+            if self.muted:
+                c_filled = self.color_filled_m
+
+            port.clear()
+            port.add(VolumeModule.scale[i], color=c_filled)
+
+        if self.channels['volume_pct']:
+            port = self.ports['volume_pct']
+
+            c_filled = self.color_filled
+            if self.muted:
+                c_filled = self.color_filled_m
+
+            port.clear()
+            port.add( "%2d%%" % (self.volume), color=c_filled)
