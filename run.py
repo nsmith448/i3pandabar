@@ -6,6 +6,8 @@ from module_mpd import MpdModule
 from module_pidgin import PidginModule
 from module_thunderbird import ThunderbirdModule
 from module_alsa import VolumeModule
+from modules_net import IPModule
+from module_bitcoin import BitcoinPriceModule
 
 datetimePort = Port({
     'color': '#CCCCCC'
@@ -24,6 +26,12 @@ volumePort = Port({
 })
 
 volumePctPort = Port({
+})
+
+btcBuyPort = Port({
+})
+
+btcSellPort = Port({
 })
 
 clock = ClockModule({
@@ -50,7 +58,12 @@ alsaVol = VolumeModule({
 alsaVol.addPort(volumePort, 'volume_bar')
 alsaVol.addPort(volumePctPort, 'volume_pct')
 
-ports = [messagePort, mpdPort, volumePort, volumePctPort, datetimePort]
-modules = [mpd, clock, pidgin, thunderbird, alsaVol]
+btc = BitcoinPriceModule({
+})
+btc.addPort(btcBuyPort, 'buy_price')
+btc.addPort(btcSellPort, 'sell_price')
+
+ports = [messagePort, mpdPort, btcBuyPort, btcSellPort, volumePort, volumePctPort, datetimePort]
+modules = [mpd, btc, clock, pidgin, thunderbird, alsaVol]
 
 PandaMain(ports, modules).run()
