@@ -1,4 +1,5 @@
 from base import DBusModule
+import re
 
 class PidginModule(DBusModule):
     def __init__(self, cfg={}):
@@ -25,7 +26,7 @@ class PidginModule(DBusModule):
     def onMessageReceived(self, account, sender, message, conversation, flags):
         senderName = sender[0:sender.find('/')]
         self.last_sender = senderName
-        self.last_message = message
+        self.last_message = re.sub('<[^<]+?>', '', message)
         self.refresh()
 
     def refresh(self):
