@@ -7,7 +7,7 @@ class ClockModule(PollingModule):
         self.datetimefmt = cfg.get('datetimefmt', '%A %B %d, %Y %I:%M %p')
         self.datefmt = cfg.get('datefmt', '%A %B %d, %Y')
         self.timefmt = cfg.get('timefmt', '%I:%M %p')
-        self.interval = 60
+        self.interval = cfg.get('interval', 60)
         self.ticks += time.localtime().tm_sec
         self.time = ''
         self.date = ''
